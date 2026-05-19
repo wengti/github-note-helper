@@ -1,13 +1,28 @@
 'use client'
-import { Dispatch, KeyboardEvent, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, KeyboardEvent, SetStateAction, useEffect, useState } from "react";
 import { MdSend } from "react-icons/md";
 import { MessageType } from "./ChatBox";
 
-export default function ChatInput({ setMessages }: { setMessages: Dispatch<SetStateAction<MessageType[]>> }) {
+export default function ChatInput({ messages, setMessages }: { messages: MessageType[], setMessages: Dispatch<SetStateAction<MessageType[]>> }) {
 
+
+    /* State */
     const [userInput, setUserInput] = useState<string>('')
     const [error, setError] = useState<null | Error>(null)
 
+    /* Update user input and move window down */
+    function updateUserInput(event: ChangeEvent<HTMLTextAreaElement, HTMLTextAreaElement>) {
+
+        setUserInput(event.currentTarget.value)
+        setTimeout(() => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+        }, 0)
+    }
+
+    /* Send Message by Enter but still allowing shift + enter to change to newline */
     function sendMessageByEnter(event: KeyboardEvent<HTMLTextAreaElement>) {
         if (event.shiftKey) {
         }
@@ -17,15 +32,16 @@ export default function ChatInput({ setMessages }: { setMessages: Dispatch<SetSt
         }
     }
 
+    /* Send Message */
     function sendMessage() {
 
-        if (userInput === ""){
+        if (userInput === "") {
             setError(new Error("Invalid input"))
             return
         }
-        
+
         setError(null)
-        
+
         setMessages((curMessage) => {
             const newMessage = structuredClone(curMessage)
             newMessage.push({
@@ -37,6 +53,15 @@ export default function ChatInput({ setMessages }: { setMessages: Dispatch<SetSt
         setUserInput('')
     }
 
+    /* Effect - when error / messages change, scroll to bottom */
+    useEffect(() => {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'
+        });
+    }, [error, messages])
+
+    /* Components */
     return (
         <div className=''>
             {
@@ -46,9 +71,9 @@ export default function ChatInput({ setMessages }: { setMessages: Dispatch<SetSt
             <div className='border my-4 flex flex-col rounded-xl'>
                 <div className='grow flex'>
                     <textarea
-                        className='resize-none grow rounded-l-xl p-1 outline-0'
+                        className='resize-none grow rounded-l-xl p-1 outline-0 max-h-32 overflow-y-auto'
                         value={userInput}
-                        onChange={(event) => setUserInput(event.currentTarget.value)}
+                        onChange={(event) => updateUserInput(event)}
                         onKeyDown={(event) => sendMessageByEnter(event)}
                     >
                     </textarea>

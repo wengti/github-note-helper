@@ -15,7 +15,7 @@ export default function ChatBox(){
     return (
         <section className='min-h-(--content-min-height) mx-2 sm:mx-10 flex flex-col justify-end'>
             <ChatMessages messages={messages}/>
-            <ChatInput setMessages={setMessages}/>
+            <ChatInput messages={messages} setMessages={setMessages}/>
         </section>
     )
 }
