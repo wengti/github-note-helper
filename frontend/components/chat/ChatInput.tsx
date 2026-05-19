@@ -18,6 +18,14 @@ export default function ChatInput({ setMessages }: { setMessages: Dispatch<SetSt
     }
 
     function sendMessage() {
+
+        if (userInput === ""){
+            setError(new Error("Invalid input"))
+            return
+        }
+        
+        setError(null)
+        
         setMessages((curMessage) => {
             const newMessage = structuredClone(curMessage)
             newMessage.push({
