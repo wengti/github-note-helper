@@ -12,6 +12,7 @@ export default function ScrollDownToggle() {
 
     return (
         <div
+            className='cursor-pointer'
             onClick={() => scrollDown()}
         >
             <FaArrowDown className='font-bold text-2xl'/>

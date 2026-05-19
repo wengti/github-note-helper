@@ -12,6 +12,7 @@ export default function ScrollUpToggle() {
 
     return (
         <div
+            className='cursor-pointer'
             onClick={() => scrollUp()}
         >
             <FaArrowUp className='font-bold text-2xl'/>
