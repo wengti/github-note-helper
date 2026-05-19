@@ -1,5 +1,7 @@
 import Image from "next/image";
 import ThemeSwitcher from "../theme/ThemeSwitcher";
+import ScrollDownToggle from "../scroll/ScrollDownToggle";
+import ScrollUpToggle from "../scroll/ScrollUpToggle";
 
 export default function HeaderComponent(){
 
@@ -25,7 +27,11 @@ export default function HeaderComponent(){
                         GitHub <br/> Note Helper
                     </h1>
                 </div>
-                <ThemeSwitcher />
+                <div className='flex gap-2'>
+                    <ScrollUpToggle />
+                    <ScrollDownToggle />
+                    <ThemeSwitcher />
+                </div>
             </div>
         </header>
     )

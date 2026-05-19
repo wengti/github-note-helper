@@ -19,7 +19,7 @@ export default function ThemeSwitcher() {
 
     return (
         <div
-            className='w-fit text-2xl text-(--letter-black) dark:text-(--letter-white)'
+            className='w-fit text-2xl text-(--letter-black) dark:text-(--letter-white) cursor-pointer'
             onClick={() => { handleThemeSwitch() }}
         >
             {
