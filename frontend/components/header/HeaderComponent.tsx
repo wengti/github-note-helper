@@ -4,7 +4,7 @@ import ThemeSwitcher from "../theme/ThemeSwitcher";
 export default function HeaderComponent(){
 
     return (
-        <header className='p-4 bg-(--banner-blue) dark:bg-(--banner-black) h-(--header-height)'>
+        <header className='p-4 bg-(--banner-blue) dark:bg-(--banner-black) h-(--header-height) sticky top-0'>
             <div className='flex justify-between'>
                 <div className='flex gap-4 items-end'>
                     <Image 

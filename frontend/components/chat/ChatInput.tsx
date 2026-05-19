@@ -30,7 +30,7 @@ export default function ChatInput({ setMessages }: { setMessages: Dispatch<SetSt
     }
 
     return (
-        <>
+        <div className=''>
             {
                 error &&
                 <div className='text-red-500 -mb-4'>{error.message}</div>
@@ -52,6 +52,6 @@ export default function ChatInput({ setMessages }: { setMessages: Dispatch<SetSt
                     </button>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
