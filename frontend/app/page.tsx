@@ -6,7 +6,7 @@ export default function HomeComponent() {
 
 
     return (
-        <div className='h-full bg-white dark:bg-black text-(--letter-black) dark:text-(--letter-white)'>
+        <div className='grow bg-white dark:bg-black text-(--letter-black) dark:text-(--letter-white)'>
             <HeaderComponent />
             <ChatBox />
             <FooterComponent />

@@ -9,7 +9,7 @@ export default function Body({children}: {children: React.ReactNode}){
     const isDarkClsName = isDark ? 'dark' : ''
 
     return (
-        <body className={`h-full ${isDarkClsName}`}>
+        <body className={`h-full flex flex-col ${isDarkClsName}`}>
             {children}
         </body>
     )
