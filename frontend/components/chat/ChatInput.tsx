@@ -24,6 +24,7 @@ export default function ChatInput({ messages, setMessages }: { messages: Message
 
     /* Send Message by Enter but still allowing shift + enter to change to newline */
     function sendMessageByEnter(event: KeyboardEvent<HTMLTextAreaElement>) {
+
         if (event.shiftKey) {
         }
         else if (event.key === 'Enter') {
@@ -33,24 +34,81 @@ export default function ChatInput({ messages, setMessages }: { messages: Message
     }
 
     /* Send Message */
-    function sendMessage() {
+    async function sendMessage() {
+
 
         if (userInput === "") {
             setError(new Error("Invalid input"))
             return
         }
 
+
+        const curUserInput = userInput
+        const latestMessage = structuredClone(messages)
+        latestMessage.push({
+            role: "human",
+            text: curUserInput
+        })
+
         setError(null)
+        setUserInput('')
 
         setMessages((curMessage) => {
             const newMessage = structuredClone(curMessage)
             newMessage.push({
                 role: 'human',
-                text: userInput
+                text: curUserInput
             })
             return newMessage
         })
-        setUserInput('')
+
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/chat`, {
+            method: "POST",
+            body: JSON.stringify(latestMessage),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+
+        if(!res.ok) {
+            const data = await res.json()
+            setError(new Error(data.detail))
+            return
+        }
+
+        if(!res.body){
+            setError(new Error("No content in the response body"))
+            return
+        }
+
+        setMessages((curMessage) => {
+            const newMessage = structuredClone(curMessage)
+            newMessage.push({
+                role: "ai",
+                text: "Thinking..."
+            })
+            return newMessage
+        })
+
+        const decoder = new TextDecoder()
+        const reader = res.body.getReader()
+        while (true) {
+            const {done, value} = await reader.read()
+            if (done){
+                return
+            }
+            setMessages((curMessage) => {
+                const newMessage = structuredClone(curMessage)
+                const curLastMsgText = newMessage[newMessage.length - 1].text
+                const startingMsgText = curLastMsgText === "Thinking..." ? "" : curLastMsgText
+                const newLastMsgText = startingMsgText + decoder.decode(value)
+                newMessage[newMessage.length - 1].text = newLastMsgText
+                return newMessage
+            })
+        }
+  
     }
 
     /* Effect - when error / messages change, scroll to bottom */
